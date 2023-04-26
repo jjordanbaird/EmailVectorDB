@@ -1,0 +1,102 @@
+File: VectorDB\analyzer.py
+  Class: PythonCodeAnalyzer
+    Inherits from: 
+    Docstring: None
+    Method: __init__
+      Arg: self (Unknown)
+      Arg: directory (Unknown)
+      Arg: output_path (Unknown)
+      Returns: Unknown
+      Docstring: None
+    Method: get_arg_data_type
+      Arg: self (Unknown)
+      Arg: arg (Unknown)
+      Returns: Unknown
+      Docstring: None
+    Method: get_classes_and_methods
+      Arg: self (Unknown)
+      Arg: file_path (Unknown)
+      Returns: Unknown
+      Docstring: None
+    Method: analyze_directory
+      Arg: self (Unknown)
+      Returns: Unknown
+      Docstring: None
+    Method: save_results
+      Arg: self (Unknown)
+      Arg: results (Unknown)
+      Returns: Unknown
+      Docstring: None
+    Method: analyze_and_save
+      Arg: self (Unknown)
+      Returns: Unknown
+      Docstring: None
+File: VectorDB\email_fetcher.py
+  Class: EmailFetcher
+    Inherits from: 
+    Docstring: EmailFetcher is a class to fetch emails from a specified email address.
+It connects to the Gmail server using IMAP, searches for emails from a specific sender,
+and retrieves the email content.
+    Method: __init__
+      Arg: self (Unknown)
+      Arg: email_address (str)
+      Arg: password (str)
+      Returns: None
+      Docstring: None
+    Method: connect
+      Arg: self (Unknown)
+      Returns: None
+      Docstring: None
+    Method: disconnect
+      Arg: self (Unknown)
+      Returns: None
+      Docstring: None
+    Method: _get_text_from_email
+      Arg: self (Unknown)
+      Arg: msg (email.message.Message)
+      Returns: bytes
+      Docstring: None
+    Method: load_existing_emails
+      Arg: self (Unknown)
+      Returns: list[dict]
+      Docstring: None
+    Method: fetch_emails
+      Arg: self (Unknown)
+      Arg: sender_email (str)
+      Returns: list[dict]
+      Docstring: None
+File: VectorDB\email_parser.py
+  Class: TLDRParser
+    Inherits from: 
+    Docstring: TLDRParser is a class to parse the body of the TLDR Newsletter emails.
+It splits the content into sections based on predefined delimiters.
+    Method: __init__
+      Arg: self (Unknown)
+      Returns: None
+      Docstring: None
+    Method: parse
+      Arg: self (Unknown)
+      Arg: body (str)
+      Returns: list[str]
+      Docstring: None
+File: VectorDB\tldr_runner.py
+  Class: TLDRNewsletterProcessor
+    Inherits from: 
+    Docstring: TLDRNewsletterProcessor is a class to process the TLDR Newsletter emails.
+It fetches emails, parses them into sections, and processes the content
+with a chat model.
+    Method: __init__
+      Arg: self (Unknown)
+      Arg: user_email (str)
+      Arg: newsletter_email (str)
+      Returns: None
+      Docstring: None
+    Method: fetch_emails
+      Arg: self (Unknown)
+      Returns: list[dict]
+      Docstring: None
+    Method: process_emails
+      Arg: self (Unknown)
+      Arg: emails (list[dict])
+      Returns: None
+      Docstring: None

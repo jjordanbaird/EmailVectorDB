@@ -1,0 +1,7 @@
+.env
+__pycache__/
+example.txt
+scratch.*
+scratch/
+.vscode/
+data/
