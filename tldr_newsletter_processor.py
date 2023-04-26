@@ -92,7 +92,7 @@ class TLDRNewsletterProcessor:
 
 if __name__ == '__main__':
     os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
-    user_email = 'jordanbaird0@gmail.com'
+    user_email = os.getenv('EMAIL_ADDRESS')
     newsletter_processor = TLDRNewsletterProcessor(user_email)
     emails = newsletter_processor.fetch_emails()
     newsletter_processor.process_emails(emails)
