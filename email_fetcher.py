@@ -4,6 +4,8 @@ import os
 import json
 from dotenv import load_dotenv
 from email.header import decode_header, make_header
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class EmailFetcher:
     """
@@ -34,11 +36,13 @@ class EmailFetcher:
                 return part.get_payload(decode=True)
 
     def load_existing_emails(self) -> list[dict]:
-        if os.path.exists('emails.json'):
-            with open('emails.json', 'r') as f:
+        path = os.path.abspath(os.path.join(os.getcwd(), 'data', 'tldr_records.json'))
+        if os.path.exists(path):
+            with open(path, 'r') as f:
                 existing_emails = json.load(f)
         else:
             existing_emails = []
+        logging.info(f"Loaded {len(existing_emails)} existing emails")
         return existing_emails
 
     def fetch_emails(self, sender_email: str) -> list[dict]:
@@ -49,19 +53,19 @@ class EmailFetcher:
 
         existing_emails = self.load_existing_emails()
         existing_ids = {email['id'] for email in existing_emails}
+        new_ids = [x for x in email_ids if x not in existing_ids]
+        logging.info(f"Found {len(new_ids)} new emails")
 
-        for email_id in email_ids:
+        for email_id in new_ids:
             email_data = {}
             _, msg_data = self.mail.fetch(email_id, '(RFC822)')
             msg = email.message_from_bytes(msg_data[0][1])
-
-            subject = str(make_header(decode_header(msg['Subject'])))
+            if msg['Message-ID'] in existing_ids:
+                continue
+            email_data['id'] = msg['Message-ID']
+            email_data['subject'] = str(make_header(decode_header(msg['Subject'])))
             email_data['from'] = msg['From']
             email_data['date'] = msg['date']
-            email_data['id'] = msg['Message-ID']
-
-            if email_data['id'] in existing_ids:
-                continue
 
             body = self._get_text_from_email(msg)
             if body:

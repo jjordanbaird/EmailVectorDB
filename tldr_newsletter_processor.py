@@ -78,8 +78,11 @@ class TLDRNewsletterProcessor:
                             record['id'] = email_obj['id']
                             record['from'] = email_obj['from']
                             record['date'] = email_obj['date']
-                            with open(output_json, 'a') as f:
-                                json.dump(record, f, indent=4)
+                            with open(output_json, 'r') as f:
+                                l = json.load(f)
+                                l.append(record)
+                            with open(output_json, 'w') as f:
+                                json.dump(l, f, indent=4)
                     else:
                         logging.error("Processing failed after 3 retries")
                         error_data = {
@@ -87,8 +90,12 @@ class TLDRNewsletterProcessor:
                             'from': email_obj['from'],
                             'date': email_obj['date']
                         }
-                        with open(error_file, 'a') as f:
-                            json.dump(error_data, f, indent=4)
+                        with open(error_file, 'r') as f:
+                                l = json.load(f)
+                                l.append(error_data)
+                        with open(error_file, 'w') as f:
+                            json.dump(l, f, indent=4)
+
 
 if __name__ == '__main__':
     os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
