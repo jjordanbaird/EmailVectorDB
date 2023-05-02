@@ -44,15 +44,24 @@ class EmailFetcher:
         logging.info(f"Loaded {len(existing_emails)} existing emails")
         return existing_emails
 
+    def get_message_ids(self, mail, email_ids):
+        message_ids = {}
+        for email_id in email_ids:
+            _, response = mail.fetch(email_id, '(BODY.PEEK[HEADER.FIELDS (MESSAGE-ID)])')
+            message_id_header = response[0][1].decode()
+            message_id = message_id_header.strip().split(': ')[1]
+            message_ids[email_id] = message_id
+        return message_ids
+
     def fetch_emails(self, sender_email: str, processed_email_output_path: str) -> list[dict]:
         status, response = self.mail.search(None, f'FROM "{sender_email}"')
-        email_ids = response[0].split()
-
+        email_binary_ids = response[0].split()
+        email_ids = self.get_message_ids(self.mail, email_binary_ids)
         email_list = []
 
         existing_emails = self.load_existing_emails(processed_email_output_path)
         existing_ids = {email['id'] for email in existing_emails}
-        new_ids = [x for x in email_ids if x not in existing_ids]
+        new_ids = [k for k, v in email_ids.items() if v not in existing_ids]
         logging.info(f"Found {len(new_ids)} new emails")
 
         for i, email_id in enumerate(new_ids):

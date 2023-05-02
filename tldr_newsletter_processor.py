@@ -134,5 +134,5 @@ if __name__ == '__main__':
     emails = newsletter_processor.fetch_emails()
 
     # Run the asynchronous code
-    asyncio.run(newsletter_processor.process_emails(emails))
+    asyncio.run(newsletter_processor.process_emails(emails, concurrent_limit=15))
 
