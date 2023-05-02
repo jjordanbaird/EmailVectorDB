@@ -41,7 +41,7 @@ class TLDRNewsletterProcessor:
 
     def fetch_emails(self) -> list[dict]:
         self.email_fetcher.connect()
-        emails_d = self.email_fetcher.fetch_emails(self.newsletter_email)
+        emails_d = self.email_fetcher.fetch_emails(self.newsletter_email, self.output_file)
         self.email_fetcher.disconnect()
         logging.info(f"Fetched {len(emails_d)} emails")
         return emails_d

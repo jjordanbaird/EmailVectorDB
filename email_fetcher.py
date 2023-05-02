@@ -35,8 +35,7 @@ class EmailFetcher:
             if part.get_content_type() == 'text/plain':
                 return part.get_payload(decode=True)
 
-    def load_existing_emails(self) -> list[dict]:
-        path = os.path.abspath(os.path.join(os.getcwd(), 'data', 'tldr_records.json'))
+    def load_existing_emails(self, path) -> list[dict]:
         if os.path.exists(path):
             with open(path, 'r') as f:
                 existing_emails = json.load(f)
@@ -45,13 +44,13 @@ class EmailFetcher:
         logging.info(f"Loaded {len(existing_emails)} existing emails")
         return existing_emails
 
-    def fetch_emails(self, sender_email: str) -> list[dict]:
+    def fetch_emails(self, sender_email: str, processed_email_output_path: str) -> list[dict]:
         status, response = self.mail.search(None, f'FROM "{sender_email}"')
         email_ids = response[0].split()
 
         email_list = []
 
-        existing_emails = self.load_existing_emails()
+        existing_emails = self.load_existing_emails(processed_email_output_path)
         existing_ids = {email['id'] for email in existing_emails}
         new_ids = [x for x in email_ids if x not in existing_ids]
         logging.info(f"Found {len(new_ids)} new emails")
