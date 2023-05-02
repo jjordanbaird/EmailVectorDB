@@ -15,7 +15,7 @@ class PythonCodeAnalyzer:
         if arg.annotation:
             return ast.unparse(arg.annotation)
         else:
-            return "Unknown"
+            return ""
 
     def get_classes_and_methods(self, file_path):
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -32,7 +32,7 @@ class PythonCodeAnalyzer:
 
                 method_data = {}
                 for n in node.body:
-                    if isinstance(n, ast.FunctionDef):
+                    if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)):
                         method_name = n.name
                         args = [(arg.arg, self.get_arg_data_type(arg)) for arg in n.args.args]
                         return_data_type = ast.unparse(n.returns) if n.returns else "Unknown"
@@ -51,6 +51,7 @@ class PythonCodeAnalyzer:
                 }
 
         return classes_and_methods
+
 
 
     def analyze_directory(self):
@@ -84,7 +85,10 @@ class PythonCodeAnalyzer:
                     for method_name, method_data in class_data['methods'].items():
                         f.write(f"    Method: {method_name}\n")
                         for arg_name, arg_data_type in method_data['args']:
-                            f.write(f"      Arg: {arg_name} ({arg_data_type})\n")
+                            if arg_data_type:
+                                f.write(f"      Arg: {arg_name} ({arg_data_type})\n")
+                            else:
+                                f.write(f"      Arg: {arg_name}\n")
                         f.write(f"      Returns: {method_data['return_data_type']}\n")
                         f.write(f"      Docstring: {method_data['docstring']}\n")
 

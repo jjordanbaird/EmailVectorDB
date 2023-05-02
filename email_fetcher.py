@@ -56,12 +56,13 @@ class EmailFetcher:
         new_ids = [x for x in email_ids if x not in existing_ids]
         logging.info(f"Found {len(new_ids)} new emails")
 
-        for email_id in new_ids:
+        for i, email_id in enumerate(new_ids):
             email_data = {}
             _, msg_data = self.mail.fetch(email_id, '(RFC822)')
             msg = email.message_from_bytes(msg_data[0][1])
             if msg['Message-ID'] in existing_ids:
                 continue
+
             email_data['id'] = msg['Message-ID']
             email_data['subject'] = str(make_header(decode_header(msg['Subject'])))
             email_data['from'] = msg['From']
