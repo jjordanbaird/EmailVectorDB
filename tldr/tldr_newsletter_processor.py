@@ -1,11 +1,9 @@
 import os
 import json
 import asyncio
-from functools import partial
 from dotenv import load_dotenv
 from email_fetcher import EmailFetcher
-from email_parser import TLDRParser
-from langchain.llms import OpenAI
+from tldr.tldr_splitter import TLDRSplitter
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import (
     AIMessage,
@@ -14,22 +12,22 @@ from langchain.schema import (
 )
 import logging
 
-from tldr_few_shot import system_message, example_in, example_out
+from tldr.tldr_few_shot import system_message, example_in, example_out
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 load_dotenv()  # Load environment variables from the .env file
 
-class TLDRNewsletterProcessor:
+class NewsletterProcessor:
     """
-    TLDRNewsletterProcessor is a class to process the TLDR Newsletter emails.
-    It fetches emails, parses them into sections, and processes the content
+    NewsletterProcessor is a class to process Newsletter emails.
+    It fetches emails, splits them into sections, and processes the content
     with a chat model.
     """
-    def __init__(self, user_email: str, output_file, error_file, newsletter_email: str = 'dan@tldrnewsletter.com') -> None:
+    def __init__(self, user_email: str, output_file: str, error_file: str, splitter_class, newsletter_email: str = 'dan@tldrnewsletter.com') -> None:
         self.user_email = user_email
         self.newsletter_email = newsletter_email
         self.email_fetcher = EmailFetcher(self.user_email)
-        self.parser = TLDRParser()
+        self.splitter = splitter_class()
         self.chat = ChatOpenAI(temperature=.4, max_retries=0, max_tokens=2400)
         self.output_file = output_file
         self.error_file = error_file
@@ -63,7 +61,7 @@ class TLDRNewsletterProcessor:
         worker_num = 0
         for email_obj in emails:
             if 'body' in email_obj:
-                parts = self.parser.parse(email_obj['body'])
+                parts = self.splitter.parse(email_obj['body'])
                 for part in parts:
                     worker_num += 1
                     task = asyncio.ensure_future(
@@ -122,17 +120,4 @@ class TLDRNewsletterProcessor:
                         l.append(error_data)
                 with open(self.error_file, 'w') as f:
                     json.dump(l, f, indent=4)
-
-
-
-if __name__ == '__main__':
-    os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
-    user_email = os.getenv('EMAIL_ADDRESS')
-    output_file = os.path.abspath(os.path.join(os.getcwd(), 'data', 'tldr_records_with_id.json'))
-    error_file = os.path.abspath(os.path.join(os.getcwd(), 'data', 'error_records.json'))
-    newsletter_processor = TLDRNewsletterProcessor(user_email, output_file=output_file, error_file=error_file)
-    emails = newsletter_processor.fetch_emails()
-
-    # Run the asynchronous code
-    asyncio.run(newsletter_processor.process_emails(emails, concurrent_limit=15))
 
