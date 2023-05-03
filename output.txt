@@ -58,36 +58,33 @@ and retrieves the email content.
       Docstring: None
     Method: load_existing_emails
       Arg: self
+      Arg: path
       Returns: list[dict]
+      Docstring: None
+    Method: get_message_ids
+      Arg: self
+      Arg: mail
+      Arg: email_ids
+      Returns: Unknown
       Docstring: None
     Method: fetch_emails
       Arg: self
       Arg: sender_email (str)
+      Arg: processed_email_output_path (str)
       Returns: list[dict]
       Docstring: None
-File: VectorDB\email_parser.py
-  Class: TLDRParser
+File: VectorDB\tldr\tldr_newsletter_processor.py
+  Class: NewsletterProcessor
     Inherits from: 
-    Docstring: TLDRParser is a class to parse the body of the TLDR Newsletter emails.
-It splits the content into sections based on predefined delimiters.
-    Method: __init__
-      Arg: self
-      Returns: None
-      Docstring: None
-    Method: parse
-      Arg: self
-      Arg: body (str)
-      Returns: list[str]
-      Docstring: None
-File: VectorDB\tldr_newsletter_processor.py
-  Class: TLDRNewsletterProcessor
-    Inherits from: 
-    Docstring: TLDRNewsletterProcessor is a class to process the TLDR Newsletter emails.
-It fetches emails, parses them into sections, and processes the content
+    Docstring: NewsletterProcessor is a class to process Newsletter emails.
+It fetches emails, splits them into sections, and processes the content
 with a chat model.
     Method: __init__
       Arg: self
       Arg: user_email (str)
+      Arg: output_file (str)
+      Arg: error_file (str)
+      Arg: splitter_class
       Arg: newsletter_email (str)
       Returns: None
       Docstring: None
@@ -98,8 +95,6 @@ with a chat model.
     Method: process_emails
       Arg: self
       Arg: emails (list[dict])
-      Arg: output_json (str)
-      Arg: error_file (str)
       Arg: concurrent_limit (int)
       Returns: None
       Docstring: None
@@ -107,8 +102,21 @@ with a chat model.
       Arg: self
       Arg: part (str)
       Arg: email_obj (dict)
-      Arg: output_json (str)
-      Arg: error_file (str)
       Arg: sem (asyncio.Semaphore)
+      Arg: worker_num (int)
       Returns: None
+      Docstring: None
+File: VectorDB\tldr\tldr_splitter.py
+  Class: TLDRSplitter
+    Inherits from: 
+    Docstring: TLDRSplitter is a class to parse the body of the TLDR Newsletter emails.
+It splits the content into sections based on predefined delimiters.
+    Method: __init__
+      Arg: self
+      Returns: None
+      Docstring: None
+    Method: parse
+      Arg: self
+      Arg: body (str)
+      Returns: list[str]
       Docstring: None

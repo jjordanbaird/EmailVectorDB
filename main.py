@@ -6,7 +6,7 @@ from tldr.tldr_splitter import TLDRSplitter
 if __name__ == '__main__':
     os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
     user_email = os.getenv('EMAIL_ADDRESS')
-    output_file = os.path.abspath(os.path.join(os.getcwd(), 'data', 'tldr_records_with_id.json'))
+    output_file = os.path.abspath(os.path.join(os.getcwd(), 'data', 'tldr_records.json'))
     error_file = os.path.abspath(os.path.join(os.getcwd(), 'data', 'error_records.json'))
     newsletter_processor = NewsletterProcessor(user_email, splitter_class=TLDRSplitter, output_file=output_file, error_file=error_file)
     emails = newsletter_processor.fetch_emails()
