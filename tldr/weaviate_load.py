@@ -1,12 +1,13 @@
 import weaviate
 import os
 import json
-client = weaviate.Client("http://localhost:8080")
 import logging
-logging.basicConfig(level=logging.INFO)
-# Prepare a batch process
 
-data_path = os.path.abspath(os.path.join(os.getcwd(), 'data', 'tldr_records_with_id.json'))
+logging.basicConfig(level=logging.INFO)
+
+client = weaviate.Client("http://localhost:8080")
+
+data_path = os.path.abspath(os.path.join(os.getcwd(), 'data', 'tldr_records.json'))
 with open(data_path, 'r') as f:
     data = json.load(f)
 
