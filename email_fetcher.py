@@ -5,6 +5,7 @@ import json
 from dotenv import load_dotenv
 from email.header import decode_header, make_header
 import logging
+from datetime import datetime
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class EmailFetcher:
@@ -74,7 +75,8 @@ class EmailFetcher:
             email_data['id'] = msg['Message-ID']
             email_data['subject'] = str(make_header(decode_header(msg['Subject'])))
             email_data['from'] = msg['From']
-            email_data['date'] = msg['date']
+            email_data['date'] = datetime.strptime(msg['date'], "%a, %d %b %Y %H:%M:%S %z").isoformat()
+            
 
             body = self._get_text_from_email(msg)
             if body:
