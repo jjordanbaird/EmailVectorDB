@@ -3,32 +3,32 @@ File: VectorDB\analyzer.py
     Inherits from: 
     Docstring: None
     Method: __init__
-      Arg: self (Unknown)
-      Arg: directory (Unknown)
-      Arg: output_path (Unknown)
+      Arg: self
+      Arg: directory
+      Arg: output_path
       Returns: Unknown
       Docstring: None
     Method: get_arg_data_type
-      Arg: self (Unknown)
-      Arg: arg (Unknown)
+      Arg: self
+      Arg: arg
       Returns: Unknown
       Docstring: None
     Method: get_classes_and_methods
-      Arg: self (Unknown)
-      Arg: file_path (Unknown)
+      Arg: self
+      Arg: file_path
       Returns: Unknown
       Docstring: None
     Method: analyze_directory
-      Arg: self (Unknown)
+      Arg: self
       Returns: Unknown
       Docstring: None
     Method: save_results
-      Arg: self (Unknown)
-      Arg: results (Unknown)
+      Arg: self
+      Arg: results
       Returns: Unknown
       Docstring: None
     Method: analyze_and_save
-      Arg: self (Unknown)
+      Arg: self
       Returns: Unknown
       Docstring: None
 File: VectorDB\email_fetcher.py
@@ -38,30 +38,30 @@ File: VectorDB\email_fetcher.py
 It connects to the Gmail server using IMAP, searches for emails from a specific sender,
 and retrieves the email content.
     Method: __init__
-      Arg: self (Unknown)
+      Arg: self
       Arg: email_address (str)
       Arg: password (str)
       Returns: None
       Docstring: None
     Method: connect
-      Arg: self (Unknown)
+      Arg: self
       Returns: None
       Docstring: None
     Method: disconnect
-      Arg: self (Unknown)
+      Arg: self
       Returns: None
       Docstring: None
     Method: _get_text_from_email
-      Arg: self (Unknown)
-      Arg: msg (email.message.Message)
+      Arg: self
+      Arg: msg
       Returns: bytes
       Docstring: None
     Method: load_existing_emails
-      Arg: self (Unknown)
+      Arg: self
       Returns: list[dict]
       Docstring: None
     Method: fetch_emails
-      Arg: self (Unknown)
+      Arg: self
       Arg: sender_email (str)
       Returns: list[dict]
       Docstring: None
@@ -71,32 +71,44 @@ File: VectorDB\email_parser.py
     Docstring: TLDRParser is a class to parse the body of the TLDR Newsletter emails.
 It splits the content into sections based on predefined delimiters.
     Method: __init__
-      Arg: self (Unknown)
+      Arg: self
       Returns: None
       Docstring: None
     Method: parse
-      Arg: self (Unknown)
+      Arg: self
       Arg: body (str)
       Returns: list[str]
       Docstring: None
-File: VectorDB\tldr_runner.py
+File: VectorDB\tldr_newsletter_processor.py
   Class: TLDRNewsletterProcessor
     Inherits from: 
     Docstring: TLDRNewsletterProcessor is a class to process the TLDR Newsletter emails.
 It fetches emails, parses them into sections, and processes the content
 with a chat model.
     Method: __init__
-      Arg: self (Unknown)
+      Arg: self
       Arg: user_email (str)
       Arg: newsletter_email (str)
       Returns: None
       Docstring: None
     Method: fetch_emails
-      Arg: self (Unknown)
+      Arg: self
       Returns: list[dict]
       Docstring: None
     Method: process_emails
-      Arg: self (Unknown)
+      Arg: self
       Arg: emails (list[dict])
+      Arg: output_json (str)
+      Arg: error_file (str)
+      Arg: concurrent_limit (int)
+      Returns: None
+      Docstring: None
+    Method: _process_part
+      Arg: self
+      Arg: part (str)
+      Arg: email_obj (dict)
+      Arg: output_json (str)
+      Arg: error_file (str)
+      Arg: sem (asyncio.Semaphore)
       Returns: None
       Docstring: None

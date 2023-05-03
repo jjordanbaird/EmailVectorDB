@@ -5,3 +5,9 @@ scratch.*
 scratch/
 .vscode/
 data/
+errors.json
+output copy.json
+output.txt
+output.json
+todo
+output.txt
